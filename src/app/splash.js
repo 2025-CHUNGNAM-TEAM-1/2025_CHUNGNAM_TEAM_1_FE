@@ -1,11 +1,11 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import SVGProfile2Act from '../assets/svgs/available_profiles/SVGProfile2Act';
+import SVGLogo from '../assets/svgs/icons/SVGLogo';
 
-const splash = () => {
+export default function splash() {
     return (
         <View style={styles.container}>
             <View style={styles.iconWrapper}>
-                <SVGProfile2Act width={300} height={300}/>
+                <SVGLogo />
             </View>
             <TouchableOpacity style={styles.kakaoButton}>
                 <Text style={styles.kakaoText}>카카오톡으로 시작하기</Text>
@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     iconWrapper: {
-        marginBottom: 32,
+        marginBottom: 45,
         alignItems: 'center',
     },
     kakaoButton: {
         backgroundColor: '#D9D9D9',
         borderRadius: 10,
-        paddingVertical: 10,
+        paddingVertical: 6,
         paddingHorizontal: 24,
     },
     kakaoText: {
@@ -39,5 +39,3 @@ const styles = StyleSheet.create({
         lineHeight: 20,
     },
 });
-
-export default splash;
