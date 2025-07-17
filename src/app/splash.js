@@ -1,11 +1,11 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import SVGBadge from '../assets/svgs/SVGBadge';
+import SVGProfile2Act from '../assets/svgs/available_profiles/SVGProfile2Act';
 
 const splash = () => {
     return (
         <View style={styles.container}>
             <View style={styles.iconWrapper}>
-                <SVGBadge />
+                <SVGProfile2Act width={300} height={300}/>
             </View>
             <TouchableOpacity style={styles.kakaoButton}>
                 <Text style={styles.kakaoText}>카카오톡으로 시작하기</Text>
