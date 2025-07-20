@@ -1,8 +1,14 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { useRouter } from 'expo-router';
 import SVGLogo from '../assets/svgs/icons/SVGLogo';
-import handleKakaoLogin from '../services/kakao';
 
-export default function splash() {
+export default function Splash() {
+    const router = useRouter();
+
+    const handleKakaoLogin = () => {
+        router.push('/kakao-login');
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.iconWrapper}>
