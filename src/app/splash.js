@@ -1,5 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import SVGLogo from '../assets/svgs/icons/SVGLogo';
+import handleKakaoLogin from '../services/kakao';
 
 export default function splash() {
     return (
@@ -7,7 +8,7 @@ export default function splash() {
             <View style={styles.iconWrapper}>
                 <SVGLogo />
             </View>
-            <TouchableOpacity style={styles.kakaoButton}>
+            <TouchableOpacity style={styles.kakaoButton} onPress={handleKakaoLogin}>
                 <Text style={styles.kakaoText}>카카오톡으로 시작하기</Text>
             </TouchableOpacity>
         </View>

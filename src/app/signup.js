@@ -3,7 +3,7 @@ import useInput from '../hooks/useInput';
 import UserNameInput from '../components/UserNameInput';
 import SVGDefaultProfile from '../assets/svgs/available_profiles/SVGDefaultProfile';
 
-export default function signup() {
+export default function Signup() {
     const { value: userName, onChange } = useInput('');
 
     return (
