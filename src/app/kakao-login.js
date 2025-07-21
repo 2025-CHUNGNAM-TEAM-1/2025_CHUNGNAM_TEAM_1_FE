@@ -50,8 +50,9 @@ export default function KakaoLoginScreen() {
             if (statusCode === 401) errorMsg = '인증되지 않은 사용자입니다.';
             else if (statusCode === 403) errorMsg = '접근 권한이 없습니다.';
             else if (statusCode === 500) errorMsg = '서버 내부 에러가 발생했습니다.';
+            else errorMsg = '알 수 없는 오류가 발생했습니다.';
         }
-        router.back()
+        router.back();
         setShowWebView(false);
 
         Alert.alert(
