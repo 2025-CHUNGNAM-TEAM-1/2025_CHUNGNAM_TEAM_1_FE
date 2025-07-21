@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useRouter } from 'expo-router';
 import { API_BASE_URL, KAKAO_REDIRECT_URL } from "@env";
@@ -21,6 +21,7 @@ function parseTokens(url) {
 
 export default function KakaoLoginScreen() {
     const router = useRouter();
+    const [showWebView, setShowWebView] = useState(true);
 
     const handleNavigationStateChange = async (navState) => {
         const { url } = navState;
@@ -34,18 +35,51 @@ export default function KakaoLoginScreen() {
         }
     };
 
-    return (
+    const handleHttpError = async (syntheticEvent) => {
+        const { nativeEvent } = syntheticEvent;
+
+        const { statusCode, description } = nativeEvent;
+
+        let errorMsg = '로그인 중 오류가 발생했습니다. 다시 시도해 주세요.';
+
+        try {
+            const data = JSON.parse(description);
+            if (data.message) errorMsg = data.message;
+            console.log(errorMsg);
+        } catch {
+            if (statusCode === 401) errorMsg = '인증되지 않은 사용자입니다.';
+            else if (statusCode === 403) errorMsg = '접근 권한이 없습니다.';
+            else if (statusCode === 500) errorMsg = '서버 내부 에러가 발생했습니다.';
+        }
+        router.back()
+        setShowWebView(false);
+
+        Alert.alert(
+            '로그인 실패',
+            errorMsg,
+            [
+                {
+                    text: '확인',
+                    onPress: () => { },
+                }
+            ],
+            { cancelable: false }
+        );
+    };
+
+    return showWebView ? (
         <View style={{ flex: 1 }}>
             <WebView
                 source={{ uri: KAKAO_LOGIN_URL }}
                 onNavigationStateChange={handleNavigationStateChange}
+                onHttpError={handleHttpError}
                 startInLoadingState
                 renderLoading={() => (
                     <ActivityIndicator style={styles.loading} size="large" color="#333" />
                 )}
             />
         </View>
-    );
+    ) : null;
 }
 
 const styles = StyleSheet.create({

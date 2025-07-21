@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { useRouter } from 'expo-router';
 import SVGLogo from "../assets/svgs/icons/SVGLogo";
-import { getAccessToken } from "../utils/tokenStorage";
+import { getAccessToken, removeToken } from "../utils/tokenStorage";
 
 export default function Index() {
     const [isReady, setIsReady] = useState(false);
