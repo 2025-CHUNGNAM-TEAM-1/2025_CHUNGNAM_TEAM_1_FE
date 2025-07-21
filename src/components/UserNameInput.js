@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default function UserNameInput({ value, onChange, placeholder }) {
+export default function UserNameInput({ value, onChange, placeholder, onCheck }) {
     return (
         <View style={styles.inputContainer}>
             <TextInput
@@ -13,7 +13,7 @@ export default function UserNameInput({ value, onChange, placeholder }) {
                 autoCapitalize="none"
                 autoCorrect={false}
             />
-            <TouchableOpacity style={styles.btn}>
+            <TouchableOpacity style={styles.btn} onPress={() => onCheck(value)}>
                 <Text style={styles.btnText}>확인</Text>
             </TouchableOpacity>
         </View>

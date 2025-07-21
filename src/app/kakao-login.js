@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview';
 import { useRouter } from 'expo-router';
 import { API_BASE_URL, KAKAO_REDIRECT_URL } from "@env";
 import { saveAccessToken, saveRefreshToken } from '../utils/tokenStorage';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const KAKAO_LOGIN_URL = `${API_BASE_URL}/oauth2/authorization/kakao`;
 
@@ -76,7 +77,7 @@ export default function KakaoLoginScreen() {
                 onHttpError={handleHttpError}
                 startInLoadingState
                 renderLoading={() => (
-                    <ActivityIndicator style={styles.loading} size="large" color="#333" />
+                    <LoadingSpinner />
                 )}
             />
         </View>

@@ -3,6 +3,7 @@ import { View, ActivityIndicator } from "react-native";
 import { useRouter } from 'expo-router';
 import SVGLogo from "../assets/svgs/icons/SVGLogo";
 import { getAccessToken, removeToken } from "../utils/tokenStorage";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Index() {
     const [isReady, setIsReady] = useState(false);
@@ -26,7 +27,7 @@ export default function Index() {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#A3D9C3' }}>
                 <SVGLogo />
-                <ActivityIndicator style={{ marginTop: 24 }} size="large" />
+                <LoadingSpinner />
             </View>
         );
     }
