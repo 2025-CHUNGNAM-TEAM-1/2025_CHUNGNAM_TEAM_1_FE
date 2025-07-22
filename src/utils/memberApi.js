@@ -1,14 +1,13 @@
-import axios from 'axios';
-import { API_BASE_URL } from "@env";
+import api from "./api"
+import axios from "axios"
 
 export async function checkUserNameDuplicate(userName, access_token) {
     try {
         console.log('중복 실행')
         console.log(userName)
         console.log(access_token)
-        console.log(`${API_BASE_URL}/members/check-name?name=${encodeURIComponent(userName)}`)
-        const response = await axios.get(
-            `${API_BASE_URL}/members/check-name`,
+        const response = await api.get(
+            '/members/check-name',
             {
                 params: { name: userName },
                 headers: { Authorization: `Bearer ${access_token}` },
@@ -18,8 +17,10 @@ export async function checkUserNameDuplicate(userName, access_token) {
         return response.data;
     } catch (error) {
         if (error.response) {
+            console.log("서버와 연결 에러 뜸")
             // 서버가 응답을 반환한 경우 (400, 401, 409, 500 등)
             const { status, data } = error.response;
+            console.log(status)
             if (status === 400) {
                 // 잘못된 요청
                 throw new Error(data.message || "잘못된 요청입니다.");
@@ -38,7 +39,7 @@ export async function checkUserNameDuplicate(userName, access_token) {
             }
         } else if (error.request) {
             // 요청은 보냈으나 응답이 없음
-            throw new Error("서버로부터 응답이 없습니다.");
+            throw new Error(error.message);
         } else {
             // 요청을 보내기 전 오류
             throw new Error(error.message);
@@ -48,8 +49,8 @@ export async function checkUserNameDuplicate(userName, access_token) {
 
 export async function registerProfile(profileData, access_token) {
     try {
-        const response = await axios.post(
-            `${API_BASE_URL}/members`,
+        const response = await api.post(
+            '/members',
             profileData,
             {
                 headers: { Authorization: `Bearer ${access_token}` },
@@ -57,6 +58,9 @@ export async function registerProfile(profileData, access_token) {
         );
         return response.data;
     } catch (error) {
-        
+        if (error.response) {
+            console.log("서버와 연결 에러 뜸")
+            console.log(error.response)
+        }
     }
 }

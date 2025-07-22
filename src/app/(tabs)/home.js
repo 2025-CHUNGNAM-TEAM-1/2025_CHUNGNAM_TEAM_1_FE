@@ -5,23 +5,31 @@ import { DrawerActions } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import * as Location from 'expo-location'
 import KakaoMap from '../../components/KakaoMap';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { getAccessToken } from '../../utils/tokenStorage';
 
 export default function Home() {
   const navigation = useNavigation();
   const [search, setSearch] = useState('');
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [places, setPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('위치 권한이 거부되었습니다.');
+        setLoading(false);
         return;
       }
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+
+      setPlaces(data);
+      setLoading(false);
     })();
   }, []);
 

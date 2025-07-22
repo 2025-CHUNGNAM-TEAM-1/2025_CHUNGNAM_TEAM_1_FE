@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View } from "react-native";
 import { useRouter } from 'expo-router';
 import SVGLogo from "../assets/svgs/icons/SVGLogo";
 import { getAccessToken, removeToken } from "../utils/tokenStorage";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useAuthStore } from "../stores/useAuthStore";
 
 export default function Index() {
     const [isReady, setIsReady] = useState(false);
@@ -13,8 +14,16 @@ export default function Index() {
         const checkToken = async () => {
             try {
                 const accessToken = await getAccessToken();
-                router.replace(accessToken ? "/(tabs)" : "/splash");
+                console.log(accessToken)
+                if (accessToken) {
+                    await useAuthStore.getState().login();
+                    router.replace("/(tabs)");
+                } else {
+                    await useAuthStore.getState().logout();
+                    router.replace("/splash");
+                }
             } catch {
+                await useAuthStore.getState().logout();
                 router.replace("/splash");
             } finally {
                 setIsReady(true);
@@ -32,6 +41,5 @@ export default function Index() {
         );
     }
 
-    // 분기 시 이미 라우터로 이동하므로 이 부분 불필요.
     return null;
 }

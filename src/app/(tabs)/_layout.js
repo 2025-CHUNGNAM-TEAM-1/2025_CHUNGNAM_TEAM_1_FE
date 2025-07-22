@@ -12,6 +12,16 @@ export default function Layout() {
       }}
     >
       <Tabs.Screen
+        name="home"
+        options={{
+          title: '홈',
+          tabBarLabel: '홈',
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={focused ? "home" : "home-outline"} size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="badge-ranking"
         options={{
           headerShown: false,
@@ -19,16 +29,6 @@ export default function Layout() {
           tabBarLabel: '뱃지 랭킹',
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons name={focused ? "trophy" : "trophy-outline"} size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: '홈',
-          tabBarLabel: '홈',
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name={focused ? "home" : "home-outline"} size={size} color={color} />
           ),
         }}
       />

@@ -6,6 +6,7 @@ export default function Splash() {
     const router = useRouter();
 
     const handleKakaoLogin = () => {
+        console.log("카카오 로그인으로 이동")
         router.push('/kakao-login');
     };
 

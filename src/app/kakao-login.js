@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, ActivityIndicator, StyleSheet, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useRouter } from 'expo-router';
 import { API_BASE_URL, KAKAO_REDIRECT_URL } from "@env";
 import { saveAccessToken, saveRefreshToken } from '../utils/tokenStorage';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { useAuthStore } from '../stores/useAuthStore';
 
 const KAKAO_LOGIN_URL = `${API_BASE_URL}/oauth2/authorization/kakao`;
 
@@ -31,6 +32,8 @@ export default function KakaoLoginScreen() {
             if (accessToken && refreshToken) {
                 await saveAccessToken(accessToken);
                 await saveRefreshToken(refreshToken);
+                await useAuthStore.getState().login();
+                console.log("로그인 성공")
                 router.replace('/signup');
             }
         }
@@ -83,11 +86,3 @@ export default function KakaoLoginScreen() {
         </View>
     ) : null;
 }
-
-const styles = StyleSheet.create({
-    loading: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
