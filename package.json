@@ -1,7 +1,7 @@
 {
   "name": "chungnam_fe",
   "version": "1.0.0",
-  "main": "src/index",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
