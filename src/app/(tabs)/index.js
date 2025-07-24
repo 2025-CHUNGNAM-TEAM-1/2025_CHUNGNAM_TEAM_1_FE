@@ -29,10 +29,10 @@ export default function Home() {
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
 
-            const data = await fetchAllPlacesInCheonan(['CT1']);
+            // const data = await fetchAllPlacesInCheonan(['CT1']);
 
-
-            setPlaces(data);
+            // console.log(data)
+            // setPlaces(data);
             setLoading(false);
         })();
     }, []);

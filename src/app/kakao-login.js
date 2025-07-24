@@ -33,6 +33,8 @@ export default function KakaoLoginScreen() {
                 await saveAccessToken(accessToken);
                 await saveRefreshToken(refreshToken);
                 await useAuthStore.getState().login();
+                console.log(accessToken)
+                console.log(refreshToken)
                 console.log("로그인 성공")
                 router.replace('/signup');
             }
