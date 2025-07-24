@@ -3,14 +3,14 @@ import { useRouter } from 'expo-router';
 import { useAuthStore } from '../stores/useAuthStore';
 
 export default function AuthWatcher() {
-    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const refreshExpiration = useAuthStore((state) => state.refreshExpiration);
     const router = useRouter();
 
     useEffect(() => {
-        if (!isLoggedIn) {
+        if (!refreshExpiration) {
             router.replace('/splash');
         }
-    }, [isLoggedIn, router]);
+    }, [refreshExpiration]);
 
     return null;
 }

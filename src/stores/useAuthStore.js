@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 
 export const useAuthStore = create((set) => ({
-    isLoggedIn: false,
+    refreshExpiration: true,
 
-    login: () => { set({ isLoggedIn: true }); },
+    effectiveness: () => { set({ refreshExpiration: true }); },
 
-    logout: () => { set({ isLoggedIn: false }); },
+    expiration: () => { set({ refreshExpiration: false }); },
 }));

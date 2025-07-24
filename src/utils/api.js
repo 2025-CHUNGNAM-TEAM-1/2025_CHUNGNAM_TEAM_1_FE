@@ -2,7 +2,6 @@ import axios from 'axios';
 import { API_BASE_URL } from "@env";
 import { getAccessToken, getRefreshToken, saveAccessToken, saveRefreshToken, removeToken } from './tokenStorage';
 import { useAuthStore } from '../stores/useAuthStore';
-import { Alert } from 'react-native';
 
 const api = axios.create({ baseURL: API_BASE_URL });
 
@@ -37,8 +36,11 @@ api.interceptors.response.use(
                     console.log(refreshToken)
                     // 토큰 재발급 요청
                     const { data } = await axios.post(`${API_BASE_URL}/auth/reissue`, { refreshToken });
+                    console.log(data.accessToken)
+                    console.log(data.refreshToken)
                     await saveAccessToken(data.accessToken);
                     await saveRefreshToken(data.refreshToken);
+
                     // 대기 중인 API 재시도
                     requestQueue.forEach((cb) => cb(data.accessToken));
                     requestQueue = [];
@@ -47,9 +49,9 @@ api.interceptors.response.use(
                     return api(config);
                 } catch (err) {
                     // 로그아웃 처리 등
-                    Alert.alert('세션 만료', '세션이 만료되어 다시 로그인해주세요.');
+                    console.log("로그아웃 처리")
                     await removeToken();
-                    await useAuthStore.getState().logout();
+                    await useAuthStore.getState().expiration();
                     isRefreshing = false;
                     return Promise.reject(err);
                 }

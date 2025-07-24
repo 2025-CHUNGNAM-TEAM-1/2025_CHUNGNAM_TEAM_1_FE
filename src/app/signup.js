@@ -3,7 +3,6 @@ import useInput from '../hooks/useInput';
 import UserNameInput from '../components/UserNameInput';
 import { checkUserNameDuplicate, registerProfile } from '../utils/memberApi';
 import { useState } from 'react';
-import { getAccessToken } from '../utils/tokenStorage';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useRouter } from 'expo-router';
 
@@ -13,19 +12,16 @@ export default function Signup() {
     const router = useRouter();
 
     const handleCheckAndRegister = async () => {
-        const access_token = await getAccessToken()
         setLoading(true);
         try {
-            await checkUserNameDuplicate(userName, access_token);
-            await registerProfile({ name: userName }, access_token);
-            Alert.alert('등록 완료!');
-            
+            await checkUserNameDuplicate(userName);
+            await registerProfile({ name: userName });
+            router.replace('/(tabs)');
         } catch (e) {
-            Alert.alert(e.message || '오류가 발생했습니다.');
+            Alert.alert(e.message);
             console.log(e.message);
         } finally {
             setLoading(false);
-            router.replace('/(tabs)');
         }
     };
 

@@ -4,7 +4,7 @@ import AuthWatcher from "../components/AuthWatcher";
 export default function Layout() {
     return (
         <>
-            
+            <AuthWatcher />
             <Stack
                 screenOptions={{
                     headerShown: false,

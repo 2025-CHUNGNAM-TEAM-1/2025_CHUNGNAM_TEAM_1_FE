@@ -9,21 +9,21 @@ import { useAuthStore } from "../stores/useAuthStore";
 export default function Index() {
     const [isReady, setIsReady] = useState(false);
     const router = useRouter();
+    const refreshExpiration = useAuthStore((state) => state.refreshExpiration);
 
     useEffect(() => {
         const checkToken = async () => {
             try {
+                await removeToken()
                 const accessToken = await getAccessToken();
                 console.log(accessToken)
+                console.log(refreshExpiration)
                 if (accessToken) {
-                    await useAuthStore.getState().login();
                     router.replace("/(tabs)");
                 } else {
-                    await useAuthStore.getState().logout();
                     router.replace("/splash");
                 }
             } catch {
-                await useAuthStore.getState().logout();
                 router.replace("/splash");
             } finally {
                 setIsReady(true);

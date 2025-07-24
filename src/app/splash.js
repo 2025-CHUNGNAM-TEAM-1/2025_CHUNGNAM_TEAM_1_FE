@@ -1,9 +1,12 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import SVGLogo from '../assets/svgs/icons/SVGLogo';
+import { useAuthStore } from '../stores/useAuthStore';
 
 export default function Splash() {
     const router = useRouter();
+    const refreshExpiration = useAuthStore((state) => state.refreshExpiration);
+    console.log(refreshExpiration)
 
     const handleKakaoLogin = () => {
         console.log("카카오 로그인으로 이동")

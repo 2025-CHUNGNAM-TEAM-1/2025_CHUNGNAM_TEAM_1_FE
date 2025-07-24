@@ -24,6 +24,7 @@ function parseTokens(url) {
 export default function KakaoLoginScreen() {
     const router = useRouter();
     const [showWebView, setShowWebView] = useState(true);
+    const refreshExpiration = useAuthStore((state) => state.refreshExpiration);
 
     const handleNavigationStateChange = async (navState) => {
         const { url } = navState;
@@ -32,9 +33,10 @@ export default function KakaoLoginScreen() {
             if (accessToken && refreshToken) {
                 await saveAccessToken(accessToken);
                 await saveRefreshToken(refreshToken);
-                await useAuthStore.getState().login();
+                await useAuthStore.getState().effectiveness();
                 console.log(accessToken)
                 console.log(refreshToken)
+                console.log(refreshExpiration)
                 console.log("로그인 성공")
                 router.replace('/signup');
             }
