@@ -2,9 +2,11 @@ import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import SVGLogo from '../assets/svgs/icons/SVGLogo';
 import { useAuthStore } from '../stores/useAuthStore';
+import useBackButtonExit from '../hooks/useBackButtonExit';
 
 export default function Splash() {
     const router = useRouter();
+    useBackButtonExit();
     const refreshExpiration = useAuthStore((state) => state.refreshExpiration);
     console.log(refreshExpiration)
 

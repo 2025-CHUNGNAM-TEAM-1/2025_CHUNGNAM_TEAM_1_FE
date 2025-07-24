@@ -5,11 +5,13 @@ import { checkUserNameDuplicate, registerProfile } from '../utils/memberApi';
 import { useState } from 'react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useRouter } from 'expo-router';
+import useBackButtonExit from '../hooks/useBackButtonExit';
 
 export default function Signup() {
     const { value: userName, onChange } = useInput('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    useBackButtonExit();
 
     const handleCheckAndRegister = async () => {
         setLoading(true);

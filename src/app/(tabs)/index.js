@@ -8,6 +8,7 @@ import KakaoMap from '../../components/KakaoMap';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { getAccessToken } from '../../utils/tokenStorage';
 import fetchAllPlacesInCheonan from '../../components/fetchAllPlacesInCheonan';
+import useBackButtonExit from '../../hooks/useBackButtonExit';
 
 export default function Home() {
     const navigation = useNavigation();
@@ -16,6 +17,7 @@ export default function Home() {
     const [errorMsg, setErrorMsg] = useState(null);
     const [places, setPlaces] = useState([]);
     const [loading, setLoading] = useState(true);
+    useBackButtonExit();
 
     useEffect(() => {
         (async () => {
