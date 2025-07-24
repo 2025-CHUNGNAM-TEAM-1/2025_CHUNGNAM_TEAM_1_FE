@@ -17,6 +17,7 @@ export default function Index() {
                 await removeToken()
                 const accessToken = await getAccessToken();
                 console.log(accessToken)
+                
                 console.log(refreshExpiration)
                 if (accessToken) {
                     router.replace("/(tabs)");
