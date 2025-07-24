@@ -14,7 +14,7 @@ export default function Index() {
     useEffect(() => {
         const checkToken = async () => {
             try {
-                await removeToken()
+                // await removeToken()
                 const accessToken = await getAccessToken();
                 console.log(accessToken)
                 console.log(refreshExpiration)
