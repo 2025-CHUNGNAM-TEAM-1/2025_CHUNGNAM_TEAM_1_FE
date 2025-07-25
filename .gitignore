@@ -36,3 +36,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# my-release-key.keystore
+my-release-key.keystore
+
+# android
+android/
