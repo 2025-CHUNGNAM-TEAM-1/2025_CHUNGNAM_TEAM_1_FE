@@ -1,18 +1,17 @@
 import { Stack, useNavigation } from 'expo-router';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import * as Location from 'expo-location'
 import KakaoMap from '../../components/KakaoMap';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { getAccessToken } from '../../utils/tokenStorage';
-import fetchAllPlacesInCheonan from '../../components/fetchAllPlacesInCheonan';
 import useBackButtonExit from '../../hooks/useBackButtonExit';
+import SearchHeader from '../../components/SearchHeader';
 
 export default function Home() {
     const navigation = useNavigation();
-    const [search, setSearch] = useState('');
+
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const [places, setPlaces] = useState([]);
@@ -27,14 +26,8 @@ export default function Home() {
                 setLoading(false);
                 return;
             }
-
             let location = await Location.getCurrentPositionAsync({});
             setLocation(location);
-
-            // const data = await fetchAllPlacesInCheonan(['CT1']);
-
-            // console.log(data)
-            // setPlaces(data);
             setLoading(false);
         })();
     }, []);
@@ -44,12 +37,8 @@ export default function Home() {
             <Stack.Screen
                 options={{
                     headerTitle: () => (
-                        <TextInput
-                            value={search}
-                            onChangeText={setSearch}
-                            placeholder="장소 검색"
-                            placeholderTextColor="rgba(0, 0, 0, 0.65)"
-                            style={styles.searchInput}
+                        <SearchHeader
+                            point={5000}
                         />
                     ),
                     headerRight: () => (
@@ -70,7 +59,7 @@ export default function Home() {
                                 {location ? (
                                     <KakaoMap latitude={location.coords.latitude} longitude={location.coords.longitude} places={places} />
                                 ) : (
-                                    <Text>위치를 가져오는 중입니다...</Text>
+                                    <LoadingSpinner />
                                 )}
                             </View>
                         }
@@ -95,7 +84,7 @@ const styles = StyleSheet.create({
     mapFake: {
         flex: 1,
         backgroundColor: '#ededed',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'stretch',
     },
 });
