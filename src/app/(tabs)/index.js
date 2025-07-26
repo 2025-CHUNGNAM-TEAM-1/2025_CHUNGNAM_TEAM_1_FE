@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
-import * as Location from 'expo-location'
+import * as Location from 'expo-location';
 import KakaoMap from '../../components/KakaoMap';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import useBackButtonExit from '../../hooks/useBackButtonExit';
@@ -21,48 +21,46 @@ export default function Home() {
     const [places, setPlaces] = useState([]);
     const [loading, setLoading] = useState(true);
     const { setPlace } = usePlaceStore();
+
     useBackButtonExit();
 
     useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('위치 권한이 거부되었습니다.');
-                setLoading(false);
-                return;
-            }
-            let location = await Location.getCurrentPositionAsync({});
-            const { latitude, longitude } = location.coords;
-            setLocation(location);
-            userLocationStore.getState().setLocation({ latitude, longitude });
-            setLoading(false);
-        })();
-    }, []);
-
-    useEffect(() => {
-        (async () => {
+        const fetchData = async () => {
             try {
+                const { status } = await Location.requestForegroundPermissionsAsync();
+                if (status !== 'granted') {
+                    setErrorMsg('위치 권한이 거부되었습니다.');
+                    setLoading(false);
+                    return;
+                }
+
+                const loc = await Location.getCurrentPositionAsync({});
+                const { latitude, longitude } = loc.coords;
+                setLocation(loc);
+                userLocationStore.getState().setLocation({ latitude, longitude });
+
                 const placeData = await getAllPlaces();
                 const converted = convertPlaces(placeData);
-
                 setPlaces(converted);
                 setPlace(converted);
             } catch (e) {
                 Alert.alert(e.message);
-                setErrorMsg('장소 정보를 불러올 수 없습니다.');
+                setErrorMsg('데이터를 불러오는 중 오류가 발생했습니다.');
             } finally {
                 setLoading(false);
             }
-        })();
+        };
+
+        fetchData();
     }, []);
 
     const handleSearch = async (keyword) => {
-        if (!keyword) {
-            return
-        }
+        if (!keyword) return;
+
         try {
             const result = await searchPlaces(keyword);
-            console.log(result)
+            console.log(result);
+            // 필요하면 여기에 장소 상태 업데이트 코드 추가
         } catch (e) {
             Alert.alert(e.message);
         }
@@ -72,10 +70,15 @@ export default function Home() {
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
             <Stack.Screen
                 options={{
-                    headerTitle: () => (<SearchHeader point={5000} onSearch={handleSearch} />),
+                    headerTitle: () => <SearchHeader point={5000} onSearch={handleSearch} />,
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-                            <Ionicons name="menu-outline" size={40} color="#000000" style={{ marginRight: 8 }} />
+                            <Ionicons
+                                name="menu-outline"
+                                size={40}
+                                color="#000000"
+                                style={{ marginRight: 8 }}
+                            />
                         </TouchableOpacity>
                     ),
                     headerStyle: { backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderColor: '#EEE' },
@@ -84,18 +87,13 @@ export default function Home() {
 
             <View style={{ flex: 1 }}>
                 <View style={styles.mapFake}>
-                    <>
-                        {errorMsg
-                            ? <Text>{errorMsg}</Text>
-                            : <View>
-                                {location ? (
-                                    <KakaoMap latitude={location.coords.latitude} longitude={location.coords.longitude} places={places} />
-                                ) : (
-                                    <LoadingSpinner />
-                                )}
-                            </View>
-                        }
-                    </>
+                    {errorMsg ? (
+                        <Text>{errorMsg}</Text>
+                    ) : loading ? (
+                        <LoadingSpinner />
+                    ) : (
+                        location && <KakaoMap latitude={location.coords.latitude} longitude={location.coords.longitude} places={places} />
+                    )}
                 </View>
             </View>
         </View>
@@ -108,7 +106,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#D9D9D9',
         fontSize: 15,
-        color: '000000',
+        color: '#000000',
         paddingHorizontal: 10,
         borderWidth: 1,
         borderColor: '#CCCCCC',
