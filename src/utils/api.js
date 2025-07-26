@@ -19,7 +19,7 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         console.log("API 요청 중 에러")
-        console.log(error.response.status)
+        console.log("에러코드", error.response.status)
         const {
             config,
             response: { status }
