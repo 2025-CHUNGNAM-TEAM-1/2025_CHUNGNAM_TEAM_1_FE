@@ -45,6 +45,7 @@ export default function Layout() {
       <Tabs.Screen
         name="profile-edit"
         options={{
+          headerShown: false,
           title: '프로필 편집',
           tabBarLabel: '프로필 편집',
           tabBarIcon: ({ focused, color, size }) => (

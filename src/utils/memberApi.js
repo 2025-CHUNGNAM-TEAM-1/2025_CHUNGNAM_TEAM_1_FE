@@ -2,8 +2,6 @@ import api from "./api"
 
 export async function checkUserNameDuplicate(userName) {
     try {
-        console.log('중복 실행')
-        console.log(userName)
         const response = await api.get(
             '/members/check-name',
             {
@@ -44,8 +42,6 @@ export async function checkUserNameDuplicate(userName) {
 
 export async function registerProfile(profileData) {
     try {
-        console.log('등록 실행')
-        console.log(profileData)
         const response = await api.post(
             '/members',
             profileData,
