@@ -9,7 +9,7 @@ let isRefreshing = false;
 let requestQueue = [];
 
 api.interceptors.request.use(async (config) => {
-    console.log("인터셉트 리퀘스트")
+    console.log("API 요청")
     const token = await getAccessToken();
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
@@ -18,7 +18,7 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
-        console.log("인터셉트 리스폰스 에러")
+        console.log("API 요청 중 에러")
         console.log(error.response.status)
         const {
             config,
@@ -26,11 +26,10 @@ api.interceptors.response.use(
         } = error;
         // 토큰 만료로 401 발생 시
         if (status === 401 && !config._retry) {
-            console.log("실행1")
+            console.log("엑세스 토큰값 만료")
             config._retry = true;
             if (!isRefreshing) {
                 isRefreshing = true;
-                console.log("실행2")
                 try {
                     const refreshToken = await getRefreshToken();
                     console.log(refreshToken)

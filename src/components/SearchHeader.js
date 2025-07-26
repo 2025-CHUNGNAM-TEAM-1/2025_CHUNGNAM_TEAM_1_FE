@@ -2,7 +2,7 @@ import React, { useRef, useState, useCallback } from 'react';
 import { View, Text, Animated, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-function SearchHeader({ point = 5000 }) {
+function SearchHeader({ onSearch, point = 5000 }) {
     const [visible, setVisible] = useState(false);
     const [search, setSearch] = useState('');
     const slideAnim = useRef(new Animated.Value(0)).current;
@@ -37,16 +37,17 @@ function SearchHeader({ point = 5000 }) {
                         value={search}
                         onChangeText={setSearch}
                         placeholder="장소 검색"
+                        onSubmitEditing={() => onSearch?.(search)}
                         style={{
                             flex: 1,
-                            height: 38,        
+                            height: 38,
                             fontSize: 15,
-                            lineHeight: 22,      
+                            lineHeight: 22,
                             color: '#000',
                             backgroundColor: 'transparent',
                             paddingHorizontal: 4,
-                            paddingVertical: 0, 
-                            textAlignVertical: 'center', 
+                            paddingVertical: 0,
+                            textAlignVertical: 'center',
                         }}
                         placeholderTextColor="rgba(0,0,0,0.65)"
                         returnKeyType="search"

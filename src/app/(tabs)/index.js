@@ -1,5 +1,5 @@
 import { Stack, useNavigation } from 'expo-router';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
@@ -8,6 +8,10 @@ import KakaoMap from '../../components/KakaoMap';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import useBackButtonExit from '../../hooks/useBackButtonExit';
 import SearchHeader from '../../components/SearchHeader';
+import { getAllPlaces, searchPlaces } from '../../utils/cultureApi';
+import { usePlaceStore } from '../../stores/usePlaceStore';
+import { convertPlaces } from '../../utils/convertPlaces';
+import { userLocationStore } from '../../stores/useLocationStore';
 
 export default function Home() {
     const navigation = useNavigation();
@@ -16,6 +20,7 @@ export default function Home() {
     const [errorMsg, setErrorMsg] = useState(null);
     const [places, setPlaces] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { setPlace } = usePlaceStore();
     useBackButtonExit();
 
     useEffect(() => {
@@ -27,20 +32,47 @@ export default function Home() {
                 return;
             }
             let location = await Location.getCurrentPositionAsync({});
+            const { latitude, longitude } = location.coords;
             setLocation(location);
+            userLocationStore.getState().setLocation({ latitude, longitude });
             setLoading(false);
         })();
     }, []);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const placeData = await getAllPlaces();
+                const converted = convertPlaces(placeData);
+
+                setPlaces(converted);
+                setPlace(converted);
+            } catch (e) {
+                Alert.alert(e.message);
+                setErrorMsg('장소 정보를 불러올 수 없습니다.');
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, []);
+
+    const handleSearch = async (keyword) => {
+        if (!keyword) {
+            return
+        }
+        try {
+            const result = await searchPlaces(keyword);
+            console.log(result)
+        } catch (e) {
+            Alert.alert(e.message);
+        }
+    };
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
             <Stack.Screen
                 options={{
-                    headerTitle: () => (
-                        <SearchHeader
-                            point={5000}
-                        />
-                    ),
+                    headerTitle: () => (<SearchHeader point={5000} onSearch={handleSearch} />),
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
                             <Ionicons name="menu-outline" size={40} color="#000000" style={{ marginRight: 8 }} />

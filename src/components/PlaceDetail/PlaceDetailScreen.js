@@ -8,8 +8,6 @@ const PlaceDetailScreen = ({
   imageUrl,
   placeName,
   address,
-  openTime,
-  phone,
   walkTime,
   bikeTime,
   busTime,
@@ -29,8 +27,6 @@ const PlaceDetailScreen = ({
       {/* 장소 상세 정보 */}
       <PlaceInfo
         address={address}
-        openTime={openTime}
-        phone={phone}
       />
 
       {/* 예상 소요 시간 영역 */}
