@@ -1,9 +1,8 @@
-// BadgeListScreen.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-// import { getStampStatus } from './api/stamp';
-// import GoldBadge from './assets/badge_gold.svg';
-// import GrayBadge from './assets/badge_gray.svg';
+import { getStampStatus } from '../../utils/stampApi';
+import SVGBadgeAct from '../../assets/svgs/icons/SVGBadgeAct';
+import SVGBadgeInact from '../../assets/svgs/icons/SVGBadgeInact';
 
 const BadgeListScreen = () => {
   const [places, setPlaces] = useState([]);
@@ -13,7 +12,7 @@ const BadgeListScreen = () => {
     // 백엔드에서 스탬프 상태 불러오기
     const loadStamps = async () => {
       try {
-        // const data = await getStampStatus();
+        const data = await getStampStatus();
         setPlaces(data); // [{ name, badge }]
       } catch (e) {
         // 에러 처리
@@ -27,7 +26,7 @@ const BadgeListScreen = () => {
   const renderItem = ({ item }) => (
     <View style={styles.itemRow}>
       <Text style={styles.placeText}>{item.name}</Text>
-      {item.badge ? <GoldBadge width={32} height={32} /> : <GrayBadge width={32} height={32} />}
+      {item.badge ? <SVGBadgeAct width={32} height={32} /> : <SVGBadgeInact width={32} height={32} />}
     </View>
   );
 

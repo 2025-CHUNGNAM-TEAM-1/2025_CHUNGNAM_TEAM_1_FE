@@ -1,9 +1,9 @@
 import api from "./api";
 
-// 모든 장소의 스탬프 상태 목록 반환
 export const getStampStatus = async () => {
   try {
     const res = await api.get('/stamps/status');
+    console.log(res.data)
     // [{id, name, badge:boolean}]
     return res.data;
   } catch (error) {
