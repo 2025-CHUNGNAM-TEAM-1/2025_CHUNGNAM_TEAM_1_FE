@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 
 const TimeEstimate = ({ walkTime, bikeTime, busTime }) => (
   <View style={styles.timeBox}>
-    <Text style={styles.label}>가장 빠른, 큰길우선 {walkTime}</Text>
     <View style={styles.timeList}>
       <View style={styles.timeRow}>
         <Text style={styles.icon}>🚶‍♂️</Text>
@@ -26,7 +25,6 @@ const TimeEstimate = ({ walkTime, bikeTime, busTime }) => (
 
 const styles = StyleSheet.create({
   timeBox: { backgroundColor: '#f4f7f3', borderRadius: 10, padding: 12, marginBottom: 20 },
-  label: { fontWeight: '600', color: '#23643B', marginBottom: 10 },
   timeList: {},
   timeRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 2 },
   icon: { fontSize: 19, marginRight: 8 },

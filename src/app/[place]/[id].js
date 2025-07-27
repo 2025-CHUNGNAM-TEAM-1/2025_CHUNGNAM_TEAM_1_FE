@@ -5,6 +5,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { usePlaceStore } from '../../stores/usePlaceStore';
 import { userLocationStore } from '../../stores/useLocationStore';
 import { fetchTimeEstimates } from '../../utils/fetchTimeEstimates';
+import { formatMinutesWithHourLabel } from '../../hooks/useFormatMinutesWithHourLabel';
 
 const PlaceDetailPage = () => {
   const userLocation = userLocationStore((state) => state.location);
@@ -54,9 +55,9 @@ const PlaceDetailPage = () => {
       imageUrl={selectedPlace.place.image}
       placeName={selectedPlace.place.name}
       address={selectedPlace.place.address || '주소 정보 없음'}
-      walkTime={timesLoading ? '...' : times?.walkingTime + '분' || '-'}
-      bikeTime={timesLoading ? '...' : times?.bikingTime + '분' || '-'}
-      busTime={timesLoading ? '...' : times?.transitDuration + '분' || '-'}
+      walkTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.walkingTime)}
+      bikeTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.bikingTime)}
+      busTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.transitDuration)}
       onStart={() => alert('출발하기 버튼 클릭됨!')}
     />
   );
