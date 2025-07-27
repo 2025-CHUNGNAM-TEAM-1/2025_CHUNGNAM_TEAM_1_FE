@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react-native';
-import { getProfile, updateProfileName, purchaseProfileImage } from '../../utils/profileApi';
-import SVGDefaultProfile from '../../assets/svgs/available_profiles/SVGDefaultProfile'
-import SVGProfile1Act from '../../assets/svgs/available_profiles/SVGProfile1Act';
-import SVGProfile2Act from '../../assets/svgs/available_profiles/SVGProfile1Act';
-import SVGProfile3Act from '../../assets/svgs/available_profiles/SVGProfile3Act';
-import SVGProfile4Act from '../../assets/svgs/available_profiles/SVGProfile4Act';
-import SVGProfile5Act from '../../assets/svgs/available_profiles/SVGProfile5Act';
-import SVGProfile6Act from '../../assets/svgs/available_profiles/SVGProfile6Act';
+import { getProfile, updateProfileName, purchaseProfileImage } from '../../../utils/profileApi';
+import SVGDefaultProfile from '../../../assets/svgs/available_profiles/SVGDefaultProfile'
+import SVGProfile1Act from '../../../assets/svgs/available_profiles/SVGProfile1Act';
+import SVGProfile2Act from '../../../assets/svgs/available_profiles/SVGProfile1Act';
+import SVGProfile3Act from '../../../assets/svgs/available_profiles/SVGProfile3Act';
+import SVGProfile4Act from '../../../assets/svgs/available_profiles/SVGProfile4Act';
+import SVGProfile5Act from '../../../assets/svgs/available_profiles/SVGProfile5Act';
+import SVGProfile6Act from '../../../assets/svgs/available_profiles/SVGProfile6Act';
 
 const savedProfileSvgs = [
   SVGDefaultProfile,

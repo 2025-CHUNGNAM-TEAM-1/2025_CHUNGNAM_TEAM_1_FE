@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import RankingPodium from '../../components/RankingPodium.js';
+
 
 export default function Badge_ranking() {
   return (
@@ -10,7 +10,7 @@ export default function Badge_ranking() {
 
       <Text style={styles.title}>뱃지 랭킹</Text>
 
-      <RankingPodium />
+      {/* <RankingPodium /> */}
 
       <View style={styles.infoBox}>
         <Text style={styles.infoBoxText}>

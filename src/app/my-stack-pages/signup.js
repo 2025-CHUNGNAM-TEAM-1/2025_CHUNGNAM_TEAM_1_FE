@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Alert } from 'react-native';
-import useInput from '../hooks/useInput';
-import UserNameInput from '../components/UserNameInput';
-import { checkUserNameDuplicate, registerProfile } from '../utils/memberApi';
+import useInput from '../../hooks/useInput';
+import UserNameInput from '../../components/UserNameInput';
+import { checkUserNameDuplicate, registerProfile } from '../../utils/memberApi';
 import { useState } from 'react';
-import LoadingSpinner from '../components/LoadingSpinner';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import { useRouter } from 'expo-router';
-import useBackButtonExit from '../hooks/useBackButtonExit';
+import useBackButtonExit from '../../hooks/useBackButtonExit';
 
 export default function Signup() {
     const { value: userName, onChange } = useInput('');

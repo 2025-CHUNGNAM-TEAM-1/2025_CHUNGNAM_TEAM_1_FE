@@ -21,10 +21,10 @@ export default function Index() {
                 if (accessToken) {
                     router.replace("/(tabs)");
                 } else {
-                    router.replace("/splash");
+                    router.replace("/my-stack-pages/splash");
                 }
             } catch {
-                router.replace("/splash");
+                router.replace("/my-stack-pages/splash");
             } finally {
                 setIsReady(true);
             }

@@ -4,14 +4,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
-import KakaoMap from '../../components/KakaoMap';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import useBackButtonExit from '../../hooks/useBackButtonExit';
-import SearchHeader from '../../components/SearchHeader';
-import { getAllPlaces, searchPlaces } from '../../utils/cultureApi';
-import { usePlaceStore } from '../../stores/usePlaceStore';
-import { convertPlaces } from '../../utils/convertPlaces';
-import { userLocationStore } from '../../stores/useLocationStore';
+import KakaoMap from '../../../components/KakaoMap';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import useBackButtonExit from '../../../hooks/useBackButtonExit';
+import SearchHeader from '../../../components/SearchHeader';
+import { getAllPlaces, searchPlaces } from '../../../utils/cultureApi';
+import { usePlaceStore } from '../../../stores/usePlaceStore';
+import { convertPlaces } from '../../../utils/convertPlaces';
+import { userLocationStore } from '../../../stores/useLocationStore';
+import fetchAllPlacesInCheonan from '../../../components/fetchAllPlacesInCheonan';
 
 export default function Home() {
     const navigation = useNavigation();
@@ -44,6 +45,9 @@ export default function Home() {
                 setPlaces(converted);
                 setPlace(converted);
                 console.log(converted)
+                // const data = await fetchAllPlacesInCheonan();
+                // setPlaces(data);
+                // setPlace(data)
             } catch (e) {
                 Alert.alert(e.message);
                 setErrorMsg('데이터를 불러오는 중 오류가 발생했습니다.');

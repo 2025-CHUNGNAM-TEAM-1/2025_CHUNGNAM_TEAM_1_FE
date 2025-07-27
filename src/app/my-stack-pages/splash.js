@@ -1,8 +1,8 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import SVGLogo from '../assets/svgs/icons/SVGLogo';
-import { useAuthStore } from '../stores/useAuthStore';
-import useBackButtonExit from '../hooks/useBackButtonExit';
+import SVGLogo from '../../assets/svgs/icons/SVGLogo';
+import { useAuthStore } from '../../stores/useAuthStore';
+import useBackButtonExit from '../../hooks/useBackButtonExit';
 
 export default function Splash() {
     const router = useRouter();
@@ -12,7 +12,7 @@ export default function Splash() {
 
     const handleKakaoLogin = () => {
         console.log("카카오 로그인으로 이동")
-        router.push('/kakao-login');
+        router.push('/my-stack-pages/kakao-login');
     };
 
     return (

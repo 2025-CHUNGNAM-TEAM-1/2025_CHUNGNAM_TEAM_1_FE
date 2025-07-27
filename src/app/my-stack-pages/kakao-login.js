@@ -3,9 +3,10 @@ import { View, Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useRouter } from 'expo-router';
 import { API_BASE_URL, KAKAO_REDIRECT_URL } from "@env";
-import { saveAccessToken, saveRefreshToken } from '../utils/tokenStorage';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { useAuthStore } from '../stores/useAuthStore';
+import { saveAccessToken, saveRefreshToken } from '../../utils/tokenStorage';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { useAuthStore } from '../../stores/useAuthStore';
+import useBackButtonExit from '../../hooks/useBackButtonExit';
 
 const KAKAO_LOGIN_URL = `${API_BASE_URL}/oauth2/authorization/kakao`;
 
@@ -22,6 +23,7 @@ function parseTokens(url) {
 }
 
 export default function KakaoLoginScreen() {
+    useBackButtonExit();
     const router = useRouter();
     const [showWebView, setShowWebView] = useState(true);
     const refreshExpiration = useAuthStore((state) => state.refreshExpiration);
@@ -38,7 +40,7 @@ export default function KakaoLoginScreen() {
                 console.log(refreshToken)
                 console.log(refreshExpiration)
                 console.log("로그인 성공")
-                router.replace('/signup');
+                router.replace('/my-stack-pages/signup');
             }
         }
     };

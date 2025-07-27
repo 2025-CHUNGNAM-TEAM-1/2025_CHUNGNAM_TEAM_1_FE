@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-import { getStampStatus } from '../../utils/stampApi';
-import SVGBadgeAct from '../../assets/svgs/icons/SVGBadgeAct';
-import SVGBadgeInact from '../../assets/svgs/icons/SVGBadgeInact';
+import { getStampStatus } from '../../../utils/stampApi';
+import SVGBadgeAct from '../../../assets/svgs/icons/SVGBadgeAct';
+import SVGBadgeInact from '../../../assets/svgs/icons/SVGBadgeInact';
 
 const BadgeListScreen = () => {
   const [places, setPlaces] = useState([]);
@@ -53,4 +53,3 @@ const styles = StyleSheet.create({
 });
 
 export default BadgeListScreen;
-
