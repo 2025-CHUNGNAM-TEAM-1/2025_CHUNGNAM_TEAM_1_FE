@@ -43,6 +43,7 @@ export default function Home() {
                 const converted = convertPlaces(placeData);
                 setPlaces(converted);
                 setPlace(converted);
+                console.log(converted)
             } catch (e) {
                 Alert.alert(e.message);
                 setErrorMsg('데이터를 불러오는 중 오류가 발생했습니다.');
