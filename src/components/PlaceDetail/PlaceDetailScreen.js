@@ -24,7 +24,7 @@ const PlaceDetailScreen = ({
 
     const fetchStampStatus = async () => {
       try {
-        const status = await getStampStatusByPlaceId(placeId);
+        const status = await getStampStatusByPlaceId(placeId)
         setIsBadgeActive(status.collected);
       } catch (err) {
         setError('스탬프 상태를 불러오는데 실패했습니다.');

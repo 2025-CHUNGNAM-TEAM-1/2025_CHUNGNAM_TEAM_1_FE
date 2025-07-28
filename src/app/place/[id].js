@@ -8,8 +8,11 @@ import { userLocationStore } from '../../stores/useLocationStore';
 import { fetchTimeEstimates } from '../../utils/fetchTimeEstimates';
 import { formatMinutesWithHourLabel } from '../../hooks/useFormatMinutesWithHourLabel';
 import { startEcoMove } from '../../utils/startEcoMove';
+import { useRouter } from 'expo-router';
+import formatSegmentResponses from '../../components/formatSegmentResponses';
 
 const PlaceDetailPage = () => {
+  const router = useRouter();
   const userLocation = userLocationStore((state) => state.location);
   const selectedPlace = usePlaceStore((state) => state.selectedPlace);
 
@@ -65,10 +68,13 @@ const PlaceDetailPage = () => {
       });
       Alert.alert('출발 요청 성공', '친환경 이동이 시작되었습니다!');
       // TODO: 이동 중 화면으로 전환 등 추가 처리
+      router.replace('/my-stack-pages/route-start');
     } catch (e) {
       Alert.alert('출발 요청 실패', e.message);
     }
   }
+
+  const segmentText = formatSegmentResponses(times?.segmentResponses);
 
   return (
     <>
@@ -79,7 +85,7 @@ const PlaceDetailPage = () => {
         address={selectedPlace.place.address || '주소 정보 없음'}
         walkTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.walkingTime)}
         bikeTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.bikingTime)}
-        busTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.transitDuration)}
+        busTime={timesLoading ? '...' : segmentText}
         onStart={() => setModalVisible(true)}
       />
       <TransportTypeModal

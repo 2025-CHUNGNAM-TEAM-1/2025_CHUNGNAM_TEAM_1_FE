@@ -17,7 +17,7 @@ const TimeEstimate = ({ walkTime, bikeTime, busTime }) => (
       <View style={styles.timeRow}>
         <Text style={styles.icon}>🚌</Text>
         <Text style={styles.method}>버스</Text>
-        <Text style={styles.time}>{busTime}</Text>
+        <Text style={[styles.time, { flexWrap: 'wrap', width: '70%' }]} numberOfLines={9}>{busTime}</Text>
       </View>
     </View>
   </View>
