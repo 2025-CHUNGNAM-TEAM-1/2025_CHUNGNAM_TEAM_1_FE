@@ -35,6 +35,7 @@ export default function Layout() {
       <Tabs.Screen
         name="badge-collection"
         options={{
+          headerShown: false,
           title: '나의 뱃지',
           tabBarLabel: '나의 뱃지',
           tabBarIcon: ({ focused, color, size }) => (
