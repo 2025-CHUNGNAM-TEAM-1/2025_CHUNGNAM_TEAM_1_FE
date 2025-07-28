@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Text } from 'react-native';
+import { Text, Alert } from 'react-native';
 import PlaceDetailScreen from '../../components/PlaceDetail/PlaceDetailScreen';
+import TransportTypeModal from '../../components/TransportTypeModal';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { usePlaceStore } from '../../stores/usePlaceStore';
 import { userLocationStore } from '../../stores/useLocationStore';
 import { fetchTimeEstimates } from '../../utils/fetchTimeEstimates';
 import { formatMinutesWithHourLabel } from '../../hooks/useFormatMinutesWithHourLabel';
+import { startEcoMove } from '../../utils/startEcoMove';
 
 const PlaceDetailPage = () => {
   const userLocation = userLocationStore((state) => state.location);
@@ -14,6 +16,7 @@ const PlaceDetailPage = () => {
   const [times, setTimes] = useState(null);
   const [timesLoading, setTimesLoading] = useState(false);
   const [timesError, setTimesError] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (!userLocation || !selectedPlace) {
@@ -50,16 +53,40 @@ const PlaceDetailPage = () => {
 
   if (timesError) return <Text>예상 시간을 불러올 수 없습니다: {timesError}</Text>;
 
+  async function handleSelectTransport(type) {
+    setModalVisible(false);
+    try {
+      await startEcoMove({
+        placeId: selectedPlace.place.id,
+        expectedWalk: times?.walkingTime,
+        expectedBicycle: times?.bikingTime,
+        expectedTransit: times?.transitDuration,
+        transportType: type,
+      });
+      Alert.alert('출발 요청 성공', '친환경 이동이 시작되었습니다!');
+      // TODO: 이동 중 화면으로 전환 등 추가 처리
+    } catch (e) {
+      Alert.alert('출발 요청 실패', e.message);
+    }
+  }
+
   return (
-    <PlaceDetailScreen
-      imageUrl={selectedPlace.place.image}
-      placeName={selectedPlace.place.name}
-      address={selectedPlace.place.address || '주소 정보 없음'}
-      walkTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.walkingTime)}
-      bikeTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.bikingTime)}
-      busTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.transitDuration)}
-      onStart={() => alert('출발하기 버튼 클릭됨!')}
-    />
+    <>
+      <PlaceDetailScreen
+        imageUrl={selectedPlace.place.image}
+        placeName={selectedPlace.place.name}
+        address={selectedPlace.place.address || '주소 정보 없음'}
+        walkTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.walkingTime)}
+        bikeTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.bikingTime)}
+        busTime={timesLoading ? '...' : formatMinutesWithHourLabel(times?.transitDuration)}
+        onStart={() => setModalVisible(true)}
+      />
+      <TransportTypeModal
+        visible={modalVisible}
+        onSelect={handleSelectTransport}
+        onClose={() => setModalVisible(false)}
+      />
+    </>
   );
 };
 
