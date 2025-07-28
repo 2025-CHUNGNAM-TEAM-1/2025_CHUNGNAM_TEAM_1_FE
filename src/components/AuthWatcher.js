@@ -8,7 +8,8 @@ export default function AuthWatcher() {
 
     useEffect(() => {
         if (!refreshExpiration) {
-            router.replace('/splash');
+            console.log("로그아웃 처리")
+            router.replace('/my-stack-pages/splash');
         }
     }, [refreshExpiration]);
 

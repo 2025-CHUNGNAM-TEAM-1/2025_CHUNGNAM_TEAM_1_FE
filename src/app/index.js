@@ -20,11 +20,14 @@ export default function Index() {
                 console.log(refreshExpiration)
                 if (accessToken) {
                     router.replace("/(tabs)");
+                    await useAuthStore.getState().effectiveness();
                 } else {
                     router.replace("/my-stack-pages/splash");
+                    await useAuthStore.getState().expiration();
                 }
             } catch {
                 router.replace("/my-stack-pages/splash");
+                await useAuthStore.getState().expiration();
             } finally {
                 setIsReady(true);
             }
