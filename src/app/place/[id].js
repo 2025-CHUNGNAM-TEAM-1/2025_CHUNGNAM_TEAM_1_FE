@@ -73,6 +73,7 @@ const PlaceDetailPage = () => {
   return (
     <>
       <PlaceDetailScreen
+        placeId={selectedPlace.place.id}
         imageUrl={selectedPlace.place.image}
         placeName={selectedPlace.place.name}
         address={selectedPlace.place.address || '주소 정보 없음'}

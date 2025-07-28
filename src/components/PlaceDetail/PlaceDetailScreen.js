@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import PlaceInfo from './PlaceInfo';
 import TimeEstimate from './TimeEstimate';
 import StartButton from './StartButton';
+import { getStampStatusByPlaceId } from '../../utils/stampApi';
+import useBadgeStore from '../../stores/useBadgeStore';
 
 const PlaceDetailScreen = ({
+  placeId,
   imageUrl,
   placeName,
   address,
@@ -13,11 +16,29 @@ const PlaceDetailScreen = ({
   busTime,
   onStart,
 }) => {
+
+  const { setIsBadgeActive } = useBadgeStore();
+
+  useEffect(() => {
+    if (!placeId) return; // placeId 없으면 조회 안함
+
+    const fetchStampStatus = async () => {
+      try {
+        const status = await getStampStatusByPlaceId(placeId);
+        setIsBadgeActive(status.collected);
+      } catch (err) {
+        setError('스탬프 상태를 불러오는데 실패했습니다.');
+        console.error(err);
+      }
+    };
+
+    fetchStampStatus();
+  }, [placeId]);
+
   return (
     <View style={styles.container}>
       {/* 상단 아이콘과 타이틀 */}
       <View style={styles.header}>
-        <Text style={styles.headerIcon}>🏅</Text>
         <Text style={styles.placeName}>{placeName}</Text>
       </View>
 
@@ -45,7 +66,6 @@ const PlaceDetailScreen = ({
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff', padding: 14 },
   header: { alignItems: 'center', marginBottom: 8 },
-  headerIcon: { fontSize: 28 },
   placeName: { fontSize: 22, fontWeight: '700', marginTop: 4 },
   image: { width: '100%', height: 140, borderRadius: 12, marginVertical: 10 },
 });
