@@ -12,12 +12,14 @@ import { getAllPlaces, searchPlaces } from '../../../utils/cultureApi';
 import { usePlaceStore } from '../../../stores/usePlaceStore';
 import { convertPlaces } from '../../../utils/convertPlaces';
 import { userLocationStore } from '../../../stores/useLocationStore';
-import fetchAllPlacesInCheonan from '../../../components/fetchAllPlacesInCheonan';
+import { getProfile } from '../../../utils/profileApi';
+import { useProfileStore } from '../../../stores/useProfileStore';
 
 export default function Home() {
     const navigation = useNavigation();
     const router = useRouter();
     const pathname = usePathname();
+    const { setProfile, profile } = useProfileStore();
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
@@ -34,6 +36,9 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const profileData = await getProfile();
+                setProfile(profileData);
+                console.log(profile)
                 const { status } = await Location.requestForegroundPermissionsAsync();
                 if (status !== 'granted') {
                     setErrorMsg('위치 권한이 거부되었습니다.');
@@ -126,7 +131,7 @@ export default function Home() {
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
             <Stack.Screen
                 options={{
-                    headerTitle: () => <SearchHeader point={5000} onSearch={handleSearch} />,
+                    headerTitle: () => <SearchHeader point={profile.currentPoints} onSearch={handleSearch} />,
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
                             <Ionicons

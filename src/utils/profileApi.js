@@ -6,6 +6,7 @@ export const getProfile = async () => {
     console.log(response.data)
     return response.data;
   } catch (error) {
+    console.log("프로필 에러")
     throw error;
   }
 };

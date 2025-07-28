@@ -1,14 +1,22 @@
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import SVGDefaultProfile from '../assets/svgs/available_profiles/SVGDefaultProfile';
+import { useProfileStore } from '../stores/useProfileStore';
+import { getProfileSVGById } from './getProfileSVGById';
 
 export default function CustomDrawerContent(props) {
+  const profile = useProfileStore((state) => state.profile);
+  const imageId = profile?.imageId || 1;
+  const ProfileSVG = getProfileSVGById(imageId);
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
       {/* 상단 프로필 영역 */}
       <View style={styles.sidebarHeader}>
-        <SVGDefaultProfile width={38} height={38} />
-        <Text style={styles.profileName}>김철수</Text>
+        {ProfileSVG && (
+          <View style={styles.profileImgWrapper}>
+            <ProfileSVG width={38} height={38} />
+          </View>
+        )}
+        <Text style={styles.profileName}>{profile.userName}</Text>
         <TouchableOpacity onPress={() => props.navigation.closeDrawer()}>
           <Text style={styles.closeBtn}>닫기</Text>
         </TouchableOpacity>
@@ -20,7 +28,7 @@ export default function CustomDrawerContent(props) {
           <Text style={styles.menuItemText}>내 계정</Text>
         </TouchableOpacity>
 
-        <Text style={styles.loginInfo}>&gt; danwoong@gmail.com 으로 로그인</Text>
+        <Text style={styles.loginInfo}>&gt; {profile.email} 으로 로그인</Text>
 
         <TouchableOpacity style={styles.menuItem} onPress={() => props.navigation.navigate('환경설정')}>
           <Text style={styles.menuItemText}>환경설정</Text>
