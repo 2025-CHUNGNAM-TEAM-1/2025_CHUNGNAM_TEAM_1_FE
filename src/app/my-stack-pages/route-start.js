@@ -4,25 +4,28 @@ import { KAKAO_MAP_JS_KEY } from "@env";
 import { getTransitRoute, getWalkRoute } from "../../utils/startEcoMove";
 import { userLocationStore } from "../../stores/useLocationStore";
 import { usePlaceStore } from "../../stores/usePlaceStore";
+import { useTransportStore } from "../../stores/useTransportStore";
 
-function KakaoMapWebView({ mode = "transit" }) {
+function KakaoMapWebView() {
     const location = userLocationStore(state => state.location);
     const selectedPlace = usePlaceStore(state => state.selectedPlace);
+    const mode = useTransportStore(state => state.mode);
 
+    console.log(mode)
     const webviewRef = useRef(null);
 
     useEffect(() => {
-        if (location && selectedPlace && webviewRef.current) {
+        if (location && selectedPlace && webviewRef.current && mode) {
             async function fetchRouteAndSend() {
                 let routeCoords = [];
-                if (mode === "walk") {
+                if (mode === "WALK" || mode === "BICYCLE") {
                     routeCoords = await getWalkRoute(
                         location.longitude,
                         location.latitude,
                         selectedPlace.place.longitude,
                         selectedPlace.place.latitude
                     );
-                } else if (mode === "transit") {
+                } else if (mode === "TRANSIT") {
                     routeCoords = await getTransitRoute(
                         location.longitude,
                         location.latitude,

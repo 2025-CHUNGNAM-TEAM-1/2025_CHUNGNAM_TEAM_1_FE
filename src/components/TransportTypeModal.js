@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
+import { useTransportStore } from '../stores/useTransportStore';
 
 const TRANSPORT_TYPES = [
     { key: 'WALK', label: '도보' },
@@ -8,6 +9,12 @@ const TRANSPORT_TYPES = [
 ];
 
 export default function TransportTypeModal({ visible, onSelect, onClose }) {
+    const setMode = useTransportStore(state => state.setMode);
+
+    const selectMode = (key) => {
+        setMode(key);
+        onSelect(key);
+    };
     return (
         <Modal
             visible={visible}
@@ -23,7 +30,7 @@ export default function TransportTypeModal({ visible, onSelect, onClose }) {
                             <Pressable
                                 key={type.key}
                                 style={styles.option}
-                                onPress={() => onSelect(type.key)}
+                                onPress={() => selectMode(type.key)}
                             >
                                 <View style={styles.radio} />
                                 <Text style={styles.label}>{type.label}</Text>
