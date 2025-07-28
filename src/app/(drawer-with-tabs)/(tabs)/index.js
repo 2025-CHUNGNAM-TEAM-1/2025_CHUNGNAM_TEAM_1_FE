@@ -1,5 +1,5 @@
-import { Stack, useNavigation } from 'expo-router';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Stack, useNavigation, useRouter, usePathname } from 'expo-router';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, FlatList, BackHandler } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
@@ -16,12 +16,18 @@ import fetchAllPlacesInCheonan from '../../../components/fetchAllPlacesInCheonan
 
 export default function Home() {
     const navigation = useNavigation();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const [places, setPlaces] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { setPlace } = usePlaceStore();
+    const [searched, setSearched] = useState(false);
+    const [initialPlaces, setInitialPlaces] = useState([]);
+    const { setPlace, setSelectedPlace } = usePlaceStore();
+
+    const mapPlaces = searched ? places : initialPlaces;
 
     useBackButtonExit();
 
@@ -42,9 +48,12 @@ export default function Home() {
 
                 const placeData = await getAllPlaces();
                 const converted = convertPlaces(placeData);
-                setPlaces(converted);
+                setInitialPlaces(converted);
+                console.log(initialPlaces)
                 setPlace(converted);
-                console.log(converted)
+
+                setPlaces([]);        // 빈 배열로 초기화 (검색 결과 없으므로)
+                setSearched(false);
                 // const data = await fetchAllPlacesInCheonan();
                 // setPlaces(data);
                 // setPlace(data)
@@ -59,17 +68,59 @@ export default function Home() {
         fetchData();
     }, []);
 
-    const handleSearch = async (keyword) => {
-        if (!keyword) return;
+    useEffect(() => {
+        const onBackPress = () => {
+            if (pathname === '/' && searched) {
+                setSearched(false);
+                setPlaces([]);
+                setPlace(initialPlaces);
+                return true; // 이벤트 처리됨
+            }
+            return false; // 기본 동작
+        };
 
+        const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+        return () => {
+            subscription.remove();  // 이벤트 구독 해제
+        };
+    }, [searched, initialPlaces, setPlace, pathname]);
+
+    const handleSearch = async (keyword) => {
+        if (!keyword?.trim()) {
+            Alert.alert('알림', '검색어를 입력해주세요.');
+            return;
+        }
+
+        setLoading(true);
         try {
             const result = await searchPlaces(keyword);
-            console.log(result);
-            // 필요하면 여기에 장소 상태 업데이트 코드 추가
+            const converted = convertPlaces(result);
+            console.log(converted)
+            setPlaces(converted);
+            setPlace(converted);
+            setSearched(true);
         } catch (e) {
-            Alert.alert(e.message);
+            Alert.alert('검색 오류', e.message);
+            setSearched(false);
+        } finally {
+            setLoading(false);
         }
     };
+
+    const renderPlaceItem = ({ item, index }) => (
+        <TouchableOpacity
+            style={styles.placeItem}
+            onPress={() => {
+                console.log(item)
+                setSelectedPlace({ place: item });
+                router.push(`/place/${item.id}`);
+            }}
+        >
+            <Text style={styles.placeName}>{index + 1}. {item.name}</Text>
+            <Text style={styles.placeAddress}>{item.road_address_name || item.address}</Text>
+        </TouchableOpacity>
+    );
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -89,37 +140,49 @@ export default function Home() {
                     headerStyle: { backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderColor: '#EEE' },
                 }}
             />
+            <View style={styles.container}>
+                {errorMsg ? (
+                    <Text style={styles.errorText}>{errorMsg}</Text>
+                ) : loading && !places.length ? (
+                    <LoadingSpinner />
+                ) : (
+                    <>
+                        {location && (
+                            <View style={styles.mapContainer}>
+                                <KakaoMap
+                                    latitude={location.coords.latitude}
+                                    longitude={location.coords.longitude}
+                                    places={mapPlaces}
+                                />
+                            </View>
+                        )}
 
-            <View style={{ flex: 1 }}>
-                <View style={styles.mapFake}>
-                    {errorMsg ? (
-                        <Text>{errorMsg}</Text>
-                    ) : loading ? (
-                        <LoadingSpinner />
-                    ) : (
-                        location && <KakaoMap latitude={location.coords.latitude} longitude={location.coords.longitude} places={places} />
-                    )}
-                </View>
+                        {searched && (  // 검색한 경우에만 리스트 표시
+                            <View style={styles.listContainer}>
+                                <FlatList
+                                    data={places}
+                                    keyExtractor={(item) => item.id}
+                                    renderItem={renderPlaceItem}
+                                    ListEmptyComponent={() => (
+                                        <Text style={{ textAlign: 'center', marginTop: 20 }}>검색 결과가 없습니다.</Text>
+                                    )}
+                                    keyboardShouldPersistTaps="handled"
+                                />
+                            </View>
+                        )}
+                    </>
+                )}
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    searchInput: {
-        width: 250,
-        borderRadius: 5,
-        backgroundColor: '#D9D9D9',
-        fontSize: 15,
-        color: '#000000',
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: '#CCCCCC',
-    },
-    mapFake: {
-        flex: 1,
-        backgroundColor: '#ededed',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-    },
+    container: { flex: 1 },
+    mapContainer: { flex: 1, backgroundColor: '#ededed' },
+    listContainer: { flex: 1, paddingHorizontal: 10, backgroundColor: '#fff' },
+    placeItem: { paddingVertical: 10, borderBottomWidth: 1, borderColor: '#eee' },
+    placeName: { fontSize: 16, fontWeight: 'bold' },
+    placeAddress: { fontSize: 14, color: '#555' },
+    errorText: { padding: 20, textAlign: 'center', color: 'red' },
 });
